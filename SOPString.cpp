@@ -2,13 +2,34 @@
 
 using namespace std;
 
-SOPString::SOPString(string sop = "1") {
+SOPString::SOPString(string sop) {
     expression = sop;
     expression_wo_spaces = "";
     expression_products = vector<string>(0);
-    // if (!isValid()) {
-    //     throw 
-    // }
+    if (!isValid()) {
+        throw invalid_argument("Invalid SOP string input");
+    }
+
+    prepareFunctionData();
+}
+
+vector<int> SOPString::mintermsVector() {
+    return vector<int>(minterms.begin(), minterms.end());
+}
+vector<string> SOPString::variableNames() {
+    vector<string> variableNamesVector(variables.size());
+    
+    map<string, int>::iterator it;
+    for (it = variables.begin(); it!= variables.end(); it++) {
+        variableNamesVector[it->second] = it->first;
+    }
+    
+    return variableNamesVector;
+}
+
+void SOPString::addVariable(string varName) {
+    if (variables.find(varName) == variables.end())
+        variables[varName] = variables.size();
 }
 
 bool SOPString::validateAlphabet() {
@@ -33,11 +54,11 @@ bool SOPString::validateAlphabet() {
             isSafe = true;
         else if (c >= 97 && c <= 122) { // a-z
             isSafe = true;
-            variables["" + c] = variables.size(); // 2^n is an option
+            addVariable(string(1, c));
         }
         // else if (c >= 65 && c <= 90) { // A-Z
         //     isSafe = true;
-        //     variables["" + c] = variables.size(); // 2^n is an option
+        //     addVariable(string(1, c));
         // }
         else
             isSafe = false;
@@ -56,22 +77,15 @@ bool SOPString::validateProducts() {
     string product = "";
     for (int i = 0; i < expression_wo_spaces.length(); i++)
     {
-        char c = expression[i];
+        char c = expression_wo_spaces[i];
         if (c != 43) // not +
             product += c;
         else {
-            bool isSafe = true;
-            // check no empty products
-            if (product == "") isSafe = false;
-            // check no ' starting products
-            else if (product[0] == '\'') isSafe = false;
-
-            if (isSafe)
-                expression_products.push_back(product);
-            else
-                return false;
+            if (!addProduct(product)) return false;
+            product = "";
         }
     }
+    if (!addProduct(product)) return false;
     return true;
 }
 bool SOPString::isValid() {
@@ -82,7 +96,110 @@ bool SOPString::isValid() {
     return true;    
 }
 
-BooleanFunction SOPString::toFunction() {
+vector<booleanValue> SOPString::convertProduct(string product) {
+    vector<booleanValue> varValues(variables.size(), X);
 
+    string lastVariable = string(1, product[0]);
+    bool isNot = false;
+    string currentChar = "";
+    product += "."; // to consider the last variable
+
+    for (int i = 1; i < product.length(); i++)
+    {
+        currentChar = string(1, product[i]);
+        if (currentChar == "'") { // not
+            isNot = !isNot;
+        } else { // variable
+            int significance = variables[lastVariable];
+            booleanValue newValue = !isNot ? ON : OFF;
+            if (varValues[significance] == X)
+                varValues[significance] = newValue;
+            else if (varValues[significance] != newValue) {
+                // a . a' = 0, hence the entire product doesn't affect the minterms
+                // return and abort the rest of the process
+                return vector<booleanValue>(variables.size(), OFF);
+            }
+            lastVariable = currentChar;
+        }
+    }
+
+    return varValues;
+}
+
+bool SOPString::addProduct(string product) {
+    bool isSafe = true;
+    // check no empty products
+    if (product == "") isSafe = false;
+    // check no ' starting products
+    else if (product[0] == '\'') isSafe = false;
+
+    if (!isSafe) return false;
+
+    
+    expression_products.push_back(product);
+    return true;
+}
+
+void SOPString::addMinterms(vector<booleanValue> varValues) {
+    vector<int> anyValueVariables(0); // will contain the dont cares, variables which can take either ON or OFF and the product would hold
+    int minSUM = 0;
+    int accumalatedPower = 1;
+    for (int i = 0; i < varValues.size(); i++)
+    {
+        if (varValues[i] == ON) {
+            minSUM += accumalatedPower;
+        } else if (varValues[i] == X) {
+            anyValueVariables.push_back(accumalatedPower);
+        }
+
+        accumalatedPower *= 2;
+    }
+
+    addMinterms(minSUM, anyValueVariables, 0);
+}
+void SOPString::addMinterms(int minSUM, vector<int> anyValueVariables, int currentVariable) {
+    if (currentVariable >= anyValueVariables.size()) {
+        minterms.insert(minSUM);
+        return;
+    }
+
+    addMinterms(minSUM, anyValueVariables, currentVariable+1);
+    addMinterms(minSUM + anyValueVariables[currentVariable], anyValueVariables, currentVariable+1);
+}
+
+
+void SOPString::prepareFunctionData() {
     // convert products to function terms
+
+    vector<string> temp = expression_products;
+    for (int i = 0; i < expression_products.size(); i++)
+    {
+        vector<booleanValue> varValues = convertProduct(expression_products[i]);
+        addMinterms(varValues);
+    }
+}
+
+BooleanFunction SOPString::toFunction() {
+    return BooleanFunction(variables.size(), variableNames(), mintermsVector(), vector<int>(0));
+}
+
+void SOPString::test() {
+    cout << "expression: " << expression << "\n";
+    cout << "expression no spaces: " << expression_wo_spaces << "\n\n";
+
+    for (auto prod : expression_products)
+    {
+        cout << prod << "\n";
+    }
+
+    cout << endl;
+
+    for (auto name : variableNames()) {
+        cout << name << "\n";
+    }
+    cout << endl;
+    for (auto term : mintermsVector()) {
+        cout << term << "\n";
+    }
+    cout << endl;
 }

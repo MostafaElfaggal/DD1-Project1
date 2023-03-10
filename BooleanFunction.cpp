@@ -1,5 +1,4 @@
 #include "BooleanFunction.h"
-#include <stdexcept>
 
 BooleanFunction::BooleanFunction(int varCount = 0) {
     init(varCount);
@@ -29,7 +28,8 @@ BooleanFunction::BooleanFunction(string sop) {
 
 void BooleanFunction::init(int varCount) {
     variables = vector<string>(varCount);
-    terms = vector<booleanValue>(variableCount());
+    int termsCount = pow(2, variableCount());
+    terms = vector<booleanValue>(termsCount);
     
     expression = "";
 }

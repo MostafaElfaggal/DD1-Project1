@@ -1,6 +1,12 @@
 #include <string>
 #include <vector>
 
+#include <stdexcept>
+#include <math.h>
+
+#ifndef BOOLEANFUNCTION
+#define BOOLEANFUNCTION
+
 using namespace std;
 
 enum booleanValue { OFF, ON, X };
@@ -45,3 +51,5 @@ class BooleanFunction {
         void printSOP();
         void printPOS();
 };
+
+#endif
