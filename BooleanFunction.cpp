@@ -217,6 +217,46 @@ void BooleanFunction::printSOP()
 // print the canonical POS of the function
 void BooleanFunction::printPOS()
 {
+    for (int i = 0; i < terms.size(); i++)
+    {
+        if (terms[i] == OFF)
+        {
+
+            int c = 0; // shift caused by the dashes
+            string boolExpr = adjustStr(DECtoBIN(i), variableCount());
+            for (int j = 0; j < boolExpr.size(); j++)
+            {
+
+                if (boolExpr[j] == '1')
+                {
+                    string t = (variables[variables.size() - j + c - 1]);
+                    t.append("\'+");
+                    boolExpr.replace(j, 1, t);
+                    j++;
+                    c += 2;
+                }
+                else if (boolExpr[j] == '0')
+                {
+                    string t = (variables[variables.size() - j + c - 1]);
+                    t.append("+");
+
+                    boolExpr.replace(j, 1, t);
+                    j++;
+                    c++;
+                }
+            }
+
+            boolExpr[boolExpr.size() - 1] = ')'; // replace the extra '+' with a closing bracket
+            if ((i == terms.size() - 2))
+            {
+                cout << "(" << boolExpr;
+            }
+            else
+            {
+                cout << "(" << boolExpr << " * ";
+            }
+        }
+    }
 }
 
 // Kirolous
