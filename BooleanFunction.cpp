@@ -125,166 +125,161 @@ void BooleanFunction::SOPToFunction(string sop)
     // TODO:to be defined
 }
 
-// Kirolous
 // print the truth table of the function
 void BooleanFunction::printTruthTable()
 {
     for (int i = variableCount() - 1; i >= 0; i--)
     {
-        cout << variables[i];
+        cout << variables[i] << "\t";
     }
-    cout << " F\n";
+    cout << "\tF\n\n";
+
+    string val;
 
     for (int i = 0; i < terms.size(); i++)
     {
-        cout << adjustStr(DECtoBIN(i), variableCount()) << " " << terms[i] << endl;
+        if (terms[i] == OFF) val = "0";
+        else if (terms[i] == ON) val = "1";
+        else val = "X";
+        
+        string binaryNum = adjustStr(DECtoBIN(i), variableCount()); // TODO: to be adjusted and cleaned
+        string formatedBinaryNum = "";
+        formatedBinaryNum += binaryNum[0];
+        for (int i = 1; i < binaryNum.length(); i++)
+        {
+            formatedBinaryNum += "\t";
+            formatedBinaryNum += binaryNum[i];
+        }
+        
+        cout << formatedBinaryNum << "\t\t" << val << endl;
     }
 }
 
-// Kirolous
 // print the truth table of the function using letters
 void BooleanFunction::printTruthTableLetters()
 {
     for (int i = 0; i < terms.size(); i++)
     {
-        // cout << "TEST";
-        int c = 0; // shift caused by the dashes
         string boolExpr = adjustStr(DECtoBIN(i), variableCount());
+        string letterExpr = "";
         for (int j = 0; j < boolExpr.size(); j++)
         {
 
             if (boolExpr[j] == '1')
             {
-                boolExpr.replace(j, 1, variables[variables.size() - j + c - 1]);
+                letterExpr += variables[variables.size() - j -1];
+                letterExpr += " ";
             }
             else if (boolExpr[j] == '0')
             {
-                string t = (variables[variables.size() - j + c - 1]);
-                t.append("\'");
-                boolExpr.replace(j, 1, t);
-                j++;
-                c++;
-            }
-            else
-            {
-                boolExpr.replace(j, 1, string(1, 'X'));
+                letterExpr += variables[variables.size() - j - 1];
+                letterExpr += "\'";
             }
         }
-        cout << setw(variableCount() + 3) << boolExpr << "  " << terms[i] << endl;
+        string stringVal;
+        if (terms[i] == OFF)
+            stringVal = "0";
+        else if (terms[i] == ON)
+            stringVal = "1";
+        else if (terms[i] == X)
+            stringVal = "X";
+
+        cout << letterExpr << "\t" << stringVal << "\n";
     }
 }
 
-// Kirolous
 // print the canonical SOP of the function
 void BooleanFunction::printSOP()
 {
+    int productTermCount = 0;
     for (int i = 0; i < terms.size(); i++)
     {
-        if (terms[i] == ON)
+        if (terms[i] != ON) continue;
+
+        string boolExpr = adjustStr(DECtoBIN(i), variableCount());
+        string letterExpr = "";
+        for (int j = 0; j < boolExpr.size(); j++)
         {
-            int c = 0; // shift caused by the dashes
-            string boolExpr = adjustStr(DECtoBIN(i), variableCount());
-            for (int j = 0; j < boolExpr.size(); j++)
-            {
 
-                if (boolExpr[j] == '1')
-                {
-                    boolExpr.replace(j, 1, variables[variables.size() - j + c - 1]);
-                }
-                else if (boolExpr[j] == '0')
-                {
-                    string t = (variables[variables.size() - j + c - 1]);
-                    t.append("\'");
-                    boolExpr.replace(j, 1, t);
-                    j++;
-                    c++;
-                }
-            }
-
-            if (i == terms.size() - 1)
+            if (boolExpr[j] == '1')
             {
-                cout << "(" << boolExpr << ")";
+                letterExpr += variables[variables.size() - j -1];
             }
-            else
+            else if (boolExpr[j] == '0')
             {
-                cout << "(" << boolExpr << ") + ";
+                letterExpr += variables[variables.size() - j - 1];
+                letterExpr += "\'";
             }
         }
+
+        if (productTermCount == 0)
+            cout << "(" << letterExpr << ")";
+        else
+            cout << " + (" << letterExpr << ")";
+
+        productTermCount++;
     }
 }
 
-// Kirolous
 // print the canonical POS of the function
 void BooleanFunction::printPOS()
 {
+    int sumTermCount = 0;
     for (int i = 0; i < terms.size(); i++)
     {
-        if (terms[i] == OFF)
+        if (terms[i] != OFF) continue;
+
+        string boolExpr = adjustStr(DECtoBIN(i), variableCount());
+        string letterExpr = "";
+        for (int j = 0; j < boolExpr.size(); j++)
         {
+            if (j != 0) letterExpr += "+";
 
-            int c = 0; // shift caused by the dashes
-            string boolExpr = adjustStr(DECtoBIN(i), variableCount());
-            for (int j = 0; j < boolExpr.size(); j++)
+            if (boolExpr[j] == '1')
             {
-
-                if (boolExpr[j] == '1')
-                {
-                    string t = (variables[variables.size() - j + c - 1]);
-                    t.append("\'+");
-                    boolExpr.replace(j, 1, t);
-                    j++;
-                    c += 2;
-                }
-                else if (boolExpr[j] == '0')
-                {
-                    string t = (variables[variables.size() - j + c - 1]);
-                    t.append("+");
-
-                    boolExpr.replace(j, 1, t);
-                    j++;
-                    c++;
-                }
+                letterExpr += variables[variables.size() - j -1];
+                letterExpr += "\'"; // we not every term in Maxterms
             }
-
-            boolExpr[boolExpr.size() - 1] = ')'; // replace the extra '+' with a closing bracket
-            if ((i == terms.size() - 2))
+            else if (boolExpr[j] == '0')
             {
-                cout << "(" << boolExpr;
-            }
-            else
-            {
-                cout << "(" << boolExpr << " * ";
+                letterExpr += variables[variables.size() - j - 1];
             }
         }
+
+        if (sumTermCount == 0)
+        {
+            cout << "(" << letterExpr << ")";
+        }
+        else
+        {
+            cout << " * (" << letterExpr << ")";
+        }
+
+        sumTermCount++;
     }
 }
 
-// Kirolous
 // converts decimal to binary
 string BooleanFunction::DECtoBIN(int n)
 {
     string s;
     while (n)
     {
-        if (n & 1)
-            s += '1';
+        if (n & 1) // checks if the last bit is 1 or 0, equivalent to %2
+            s = "1" + s;
         else
-            s += '0';
+            s = "0" + s;
 
-        n >>= 1;
+        n >>= 1; // shifting right once, equivalent to n /= 2
     }
-    reverse(s.begin(), s.end());
     return s;
 }
 
-// Kirolous
 // ensures string length by adding zeros at the beginning
 string BooleanFunction::adjustStr(string s, int l)
 {
-    while (s.size() < l)
-    {
-        s.insert(0, "0");
-    }
+    if (l > s.length())
+        s = string(l-s.length(), '0') + s;
 
     return s;
 }

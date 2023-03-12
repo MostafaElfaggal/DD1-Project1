@@ -33,4 +33,5 @@ int main()
     f.printSOP();
     cout << "\n\n\n";
     f.printPOS();
+    cout << "\n\n\n";
 }
