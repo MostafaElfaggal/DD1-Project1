@@ -178,6 +178,39 @@ void BooleanFunction::printTruthTableLetters()
 // print the canonical SOP of the function
 void BooleanFunction::printSOP()
 {
+    for (int i = 0; i < terms.size(); i++)
+    {
+        if (terms[i] == ON)
+        {
+            int c = 0; // shift caused by the dashes
+            string boolExpr = adjustStr(DECtoBIN(i), variableCount());
+            for (int j = 0; j < boolExpr.size(); j++)
+            {
+
+                if (boolExpr[j] == '1')
+                {
+                    boolExpr.replace(j, 1, variables[variables.size() - j + c - 1]);
+                }
+                else if (boolExpr[j] == '0')
+                {
+                    string t = (variables[variables.size() - j + c - 1]);
+                    t.append("\'");
+                    boolExpr.replace(j, 1, t);
+                    j++;
+                    c++;
+                }
+            }
+
+            if (i == terms.size() - 1)
+            {
+                cout << "(" << boolExpr << ")";
+            }
+            else
+            {
+                cout << "(" << boolExpr << ") + ";
+            }
+        }
+    }
 }
 
 // Kirolous
