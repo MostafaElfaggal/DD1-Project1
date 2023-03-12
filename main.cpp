@@ -7,8 +7,7 @@ using namespace std;
 int main() {
     string func = "abc + ab'";
 
-    SOPString sop(func);
-    BooleanFunction f = sop.toFunction();
+    BooleanFunction f(func);
     cout << f.variableCount() << "\n\n";
 
     vector<booleanValue> terms = f.getTerms();

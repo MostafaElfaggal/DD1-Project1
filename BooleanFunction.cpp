@@ -16,6 +16,12 @@ BooleanFunction::BooleanFunction(int varCount, vector<int> minterms, vector<int>
     setTerms(minterms, (booleanValue)ON);
     setTerms(dontcares, (booleanValue)X);
 }
+BooleanFunction::BooleanFunction(int varCount, vector<string> varNames, vector<int> minterms) {
+    init(varCount);
+    setVariableNames(varNames);
+    setTerms(minterms, (booleanValue)ON);
+}
+
 BooleanFunction::BooleanFunction(int varCount, vector<string> varNames, vector<int> minterms, vector<int> dontcares) {
     init(varCount);
     setVariableNames(varNames);
@@ -24,6 +30,15 @@ BooleanFunction::BooleanFunction(int varCount, vector<string> varNames, vector<i
 }
 BooleanFunction::BooleanFunction(string sop) {
     SOPToFucntion(sop);
+}
+BooleanFunction::BooleanFunction(const BooleanFunction& otherFunction) {
+    copyFromOtherFunction(otherFunction);
+}
+
+void BooleanFunction::copyFromOtherFunction(const BooleanFunction& otherFunction) {
+    variables = otherFunction.getVariables();
+    terms = otherFunction.getTerms();
+    expression = otherFunction.getExpression();
 }
 
 void BooleanFunction::init(int varCount) {
@@ -34,14 +49,14 @@ void BooleanFunction::init(int varCount) {
     expression = "";
 }
 
-int BooleanFunction::variableCount() {
+int BooleanFunction::variableCount() const {
     return variables.size();
 }
 
-vector<string> BooleanFunction::getVariables() {
+vector<string> BooleanFunction::getVariables() const {
     return variables;
 }
-string BooleanFunction::getVariableName(int significance) {
+string BooleanFunction::getVariableName(int significance) const {
     if (!(significance >= 0 && significance < variableCount())) {
         throw out_of_range("Significance out of range");
     }
@@ -65,17 +80,17 @@ void BooleanFunction::setVariableNames(vector<string> newVarNames) {
     }
 }
 
-int BooleanFunction::getTermsCount() {
+int BooleanFunction::getTermsCount() const {
     return terms.size();
 }
-booleanValue BooleanFunction::operator[] (int index) {
+booleanValue BooleanFunction::operator[] (int index) const {
     if (!(index >= 0 && index < getTermsCount())) {
         throw out_of_range("Term index out of range");
     }
 
     return terms[index];
 }
-vector<booleanValue> BooleanFunction::getTerms() {
+vector<booleanValue> BooleanFunction::getTerms() const {
     return terms;
 }
 void BooleanFunction::setTerm(int index, booleanValue newValue) {
@@ -93,26 +108,32 @@ void BooleanFunction::setTerms(vector<int> indcies, booleanValue newValue) {
     }
 }
 
+string BooleanFunction::getExpression() const {
+    return expression;
+}
+
+
 void BooleanFunction::functionChanged() {
     expression = "";
 }
 
 //convert sop string to function, including all validations needed
 void BooleanFunction::SOPToFucntion(string sop) {
-    // TODO:to be defined
+    SOPString s(sop);
+    copyFromOtherFunction(BooleanFunction(s.variableCount(), s.getVariableNames(), s.getMinterms()));
 }
 
 // print the truthe table of the function
-void BooleanFunction::printTruthTable() {
+void BooleanFunction::printTruthTable() const {
     // TODO: to be defined
 }
 
 // print the canonical SOP of the function
-void BooleanFunction::printSOP() {
+void BooleanFunction::printSOP() const {
     // TODO: to be defined
 }
 
 // print the canonical POS of the function
-void BooleanFunction::printPOS() {
+void BooleanFunction::printPOS() const {
     // TODO: to be defined
 }
