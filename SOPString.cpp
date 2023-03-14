@@ -56,10 +56,10 @@ bool SOPString::validateAlphabet() {
             isSafe = true;
             addVariable(string(1, c));
         }
-        // else if (c >= 65 && c <= 90) { // A-Z
-        //     isSafe = true;
-        //     addVariable(string(1, c));
-        // }
+        else if (c >= 65 && c <= 90) { // A-Z
+            isSafe = true;
+            addVariable(string(1, c));
+        }
         else
             isSafe = false;
 
@@ -179,8 +179,18 @@ void SOPString::prepareFunctionData() {
     }
 }
 
-BooleanFunction SOPString::toFunction() {
-    return BooleanFunction(variables.size(), variableNames(), mintermsVector(), vector<int>(0));
+// BooleanFunction SOPString::toFunction() {
+//     return BooleanFunction(variables.size(), variableNames(), mintermsVector(), vector<int>(0));
+// }
+
+int SOPString::variableCount() {
+    return variables.size();
+}
+vector<string> SOPString::getVariableNames() {
+    return variableNames();
+}
+vector<int> SOPString::getMinterms() {
+    return mintermsVector();
 }
 
 void SOPString::test() {

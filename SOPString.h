@@ -2,9 +2,10 @@
 #include <vector>
 #include <set>
 #include <map>
-#include "BooleanFunction.h"
+#include "BooleanValue.h"
+// #include "BooleanFunction.h"
 
-#include <iostream>
+#include <iostream> // testing
 
 #ifndef SOPSTRING
 #define SOPSTRING
@@ -24,7 +25,7 @@ class SOPString {
         vector<string> variableNames();
 
         void addVariable(string varName);
-        vector<booleanValue> convertProduct(string product);
+        vector<booleanValue> convertProduct(string product); // FIXME: consider 1, and 0
         bool addProduct(string product);
         void addMinterms(vector<booleanValue> varValues);
         void addMinterms(int minSUM, vector<int> anyValueVariables, int currentVariable); // recurrsive over all possible combinations
@@ -36,7 +37,11 @@ class SOPString {
         void prepareFunctionData();
     public:
         SOPString(string sop);
-        BooleanFunction toFunction();
+        // BooleanFunction toFunction();
+
+        int variableCount();
+        vector<string> getVariableNames();
+        vector<int> getMinterms();
 
         void test();
 };

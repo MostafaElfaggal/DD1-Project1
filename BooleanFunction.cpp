@@ -20,8 +20,13 @@ BooleanFunction::BooleanFunction(int varCount, vector<int> minterms, vector<int>
     setTerms(minterms, (booleanValue)ON);
     setTerms(dontcares, (booleanValue)X);
 }
-BooleanFunction::BooleanFunction(int varCount, vector<string> varNames, vector<int> minterms, vector<int> dontcares)
-{
+BooleanFunction::BooleanFunction(int varCount, vector<string> varNames, vector<int> minterms) {
+    init(varCount);
+    setVariableNames(varNames);
+    setTerms(minterms, (booleanValue)ON);
+}
+
+BooleanFunction::BooleanFunction(int varCount, vector<string> varNames, vector<int> minterms, vector<int> dontcares) {
     init(varCount);
     setVariableNames(varNames);
     setTerms(minterms, (booleanValue)ON);
@@ -30,6 +35,15 @@ BooleanFunction::BooleanFunction(int varCount, vector<string> varNames, vector<i
 BooleanFunction::BooleanFunction(string sop)
 {
     SOPToFunction(sop);
+}
+BooleanFunction::BooleanFunction(const BooleanFunction& otherFunction) {
+    copyFromOtherFunction(otherFunction);
+}
+
+void BooleanFunction::copyFromOtherFunction(const BooleanFunction& otherFunction) {
+    variables = otherFunction.getVariables();
+    terms = otherFunction.getTerms();
+    expression = otherFunction.getExpression();
 }
 
 void BooleanFunction::init(int varCount)
@@ -41,19 +55,40 @@ void BooleanFunction::init(int varCount)
     expression = "";
 }
 
-int BooleanFunction::variableCount()
-{
+bool BooleanFunction::operator==(const BooleanFunction& otherFunc) {
+    // variables
+    vector<string> myNames = getVariables(), otherNames = otherFunc.getVariables();
+    if (myNames.size() != otherNames.size()) return false;
+    for (int i = 0; i < myNames.size(); i++)
+    {
+        if (myNames[i] != otherNames[i]) return false;
+    }
+    
+    // terms
+    vector<booleanValue> myTerms = getTerms(), otherTerms = otherFunc.getTerms();
+    if (myTerms.size() != otherTerms.size()) return false;
+    for (int i = 0; i < myTerms.size(); i++)
+    {
+        if (myTerms[i] != otherTerms[i]) return false;
+    }
+
+    // ignore equality of expression
+
+    return true;
+}
+bool BooleanFunction::operator!=(const BooleanFunction& otherFunc) {
+    return (!(*this == otherFunc));
+}
+
+int BooleanFunction::variableCount() const {
     return variables.size();
 }
 
-vector<string> BooleanFunction::getVariables()
-{
+vector<string> BooleanFunction::getVariables() const {
     return variables;
 }
-string BooleanFunction::getVariableName(int significance)
-{
-    if (!(significance >= 0 && significance < variableCount()))
-    {
+string BooleanFunction::getVariableName(int significance) const {
+    if (!(significance >= 0 && significance < variableCount())) {
         throw out_of_range("Significance out of range");
     }
     return variables[significance];
@@ -79,21 +114,17 @@ void BooleanFunction::setVariableNames(vector<string> newVarNames)
     }
 }
 
-int BooleanFunction::getTermsCount()
-{
+int BooleanFunction::getTermsCount() const {
     return terms.size();
 }
-booleanValue BooleanFunction::operator[](int index)
-{
-    if (!(index >= 0 && index < getTermsCount()))
-    {
+booleanValue BooleanFunction::operator[] (int index) const {
+    if (!(index >= 0 && index < getTermsCount())) {
         throw out_of_range("Term index out of range");
     }
 
     return terms[index];
 }
-vector<booleanValue> BooleanFunction::getTerms()
-{
+vector<booleanValue> BooleanFunction::getTerms() const {
     return terms;
 }
 void BooleanFunction::setTerm(int index, booleanValue newValue)
@@ -114,19 +145,23 @@ void BooleanFunction::setTerms(vector<int> indcies, booleanValue newValue)
     }
 }
 
+string BooleanFunction::getExpression() const {
+    return expression;
+}
+
 void BooleanFunction::functionChanged()
 {
     expression = "";
 }
 
-// convert sop string to function, including all validations needed
-void BooleanFunction::SOPToFunction(string sop)
-{
-    // TODO:to be defined
+//convert sop string to function, including all validations needed
+void BooleanFunction::SOPToFunction(string sop) {
+    SOPString s(sop);
+    copyFromOtherFunction(BooleanFunction(s.variableCount(), s.getVariableNames(), s.getMinterms()));
 }
 
 // print the truth table of the function
-void BooleanFunction::printTruthTable()
+void BooleanFunction::printTruthTable() const
 {
     for (int i = variableCount() - 1; i >= 0; i--)
     {
@@ -156,7 +191,7 @@ void BooleanFunction::printTruthTable()
 }
 
 // print the truth table of the function using letters
-void BooleanFunction::printTruthTableLetters()
+void BooleanFunction::printTruthTableLetters() const
 {
     for (int i = 0; i < terms.size(); i++)
     {
@@ -189,7 +224,7 @@ void BooleanFunction::printTruthTableLetters()
 }
 
 // print the canonical SOP of the function
-void BooleanFunction::printSOP()
+void BooleanFunction::printSOP() const
 {
     int productTermCount = 0;
     for (int i = 0; i < terms.size(); i++)
@@ -222,7 +257,7 @@ void BooleanFunction::printSOP()
 }
 
 // print the canonical POS of the function
-void BooleanFunction::printPOS()
+void BooleanFunction::printPOS() const
 {
     int sumTermCount = 0;
     for (int i = 0; i < terms.size(); i++)
@@ -260,7 +295,7 @@ void BooleanFunction::printPOS()
 }
 
 // converts decimal to binary
-string BooleanFunction::DECtoBIN(int n)
+string BooleanFunction::DECtoBIN(int n) const
 {
     string s;
     while (n)
@@ -276,7 +311,7 @@ string BooleanFunction::DECtoBIN(int n)
 }
 
 // ensures string length by adding zeros at the beginning
-string BooleanFunction::adjustStr(string s, int l)
+string BooleanFunction::adjustStr(string s, int l) const
 {
     if (l > s.length())
         s = string(l-s.length(), '0') + s;
