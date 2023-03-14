@@ -49,6 +49,31 @@ void BooleanFunction::init(int varCount) {
     expression = "";
 }
 
+bool BooleanFunction::operator==(const BooleanFunction& otherFunc) {
+    // variables
+    vector<string> myNames = getVariables(), otherNames = otherFunc.getVariables();
+    if (myNames.size() != otherNames.size()) return false;
+    for (int i = 0; i < myNames.size(); i++)
+    {
+        if (myNames[i] != otherNames[i]) return false;
+    }
+    
+    // terms
+    vector<booleanValue> myTerms = getTerms(), otherTerms = otherFunc.getTerms();
+    if (myTerms.size() != otherTerms.size()) return false;
+    for (int i = 0; i < myTerms.size(); i++)
+    {
+        if (myTerms[i] != otherTerms[i]) return false;
+    }
+
+    // ignore equality of expression
+
+    return true;
+}
+bool BooleanFunction::operator!=(const BooleanFunction& otherFunc) {
+    return (!(*this == otherFunc));
+}
+
 int BooleanFunction::variableCount() const {
     return variables.size();
 }

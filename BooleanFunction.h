@@ -35,6 +35,9 @@ class BooleanFunction {
         BooleanFunction(const BooleanFunction& otherFucntion);
         void init(int varCount);
 
+        bool operator==(const BooleanFunction& otherFunc);
+        bool operator!=(const BooleanFunction& otherFunc);
+
         int variableCount() const;
         vector<string> getVariables() const;
         string getVariableName(int significance) const;

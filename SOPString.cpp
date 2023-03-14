@@ -56,10 +56,10 @@ bool SOPString::validateAlphabet() {
             isSafe = true;
             addVariable(string(1, c));
         }
-        // else if (c >= 65 && c <= 90) { // A-Z
-        //     isSafe = true;
-        //     addVariable(string(1, c));
-        // }
+        else if (c >= 65 && c <= 90) { // A-Z
+            isSafe = true;
+            addVariable(string(1, c));
+        }
         else
             isSafe = false;
 
