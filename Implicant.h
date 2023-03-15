@@ -17,6 +17,8 @@ class Implicant : public BooleanFunction {
 
         void convertCoverToMinterms();
         void addMinterms(int minSUM, vector<int> anyValueVariables, int currentVariable);
+
+        int compare(const Implicant& otherImplicant) const;
     public:
         Implicant(vector<booleanValue> cover, bool newIsPrime=false, bool newIsEssential=false);
         Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime=false, bool newIsEssential=false);
@@ -31,7 +33,7 @@ class Implicant : public BooleanFunction {
         void setIsPrime(bool newIsPrime);
         void setIsEssential(bool newIsEssential);
 
-        int compare(const Implicant& otherImplicant) const;
+        bool isMergable(const Implicant& otherImplicant) const;
         Implicant operator+(const Implicant& otherImplicant) const;
 };
 

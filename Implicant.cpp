@@ -97,6 +97,10 @@ void Implicant::setCoverVariable(int significance, booleanValue newValue) {
     coverRepresentation[significance] = newValue;
 }
 
+bool Implicant::isMergable(const Implicant& otherImplicant) const {
+    return compare(otherImplicant) != -1;
+}
+
 int Implicant::compare(const Implicant& otherImplicant) const {
     if (variableCount() != otherImplicant.variableCount()) return -1;
 
