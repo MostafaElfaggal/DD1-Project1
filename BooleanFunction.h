@@ -28,6 +28,9 @@ private:
 
 
     void copyFromOtherFunction(const BooleanFunction& otherFunction);
+
+protected:
+    void setAllTerms(booleanValue newValue);
 public:
     BooleanFunction();
     BooleanFunction(int varCount);
@@ -53,7 +56,7 @@ public:
     booleanValue operator[] (int index) const;
     vector<booleanValue> getTerms() const;
     void setTerm(int index, booleanValue newValue);
-    void setTerms(vector<int> indcies, booleanValue newValue);
+    void setTerms(vector<int> indices, booleanValue newValue);
 
     string getExpression() const;
 

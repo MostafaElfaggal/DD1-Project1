@@ -137,11 +137,17 @@ void BooleanFunction::setTerm(int index, booleanValue newValue)
     terms[index] = newValue;
     functionChanged();
 }
-void BooleanFunction::setTerms(vector<int> indcies, booleanValue newValue)
+void BooleanFunction::setTerms(vector<int> indices, booleanValue newValue)
 {
-    for (int i = 0; i < indcies.size(); i++)
+    for (int i = 0; i < indices.size(); i++)
     {
-        setTerm(indcies[i], newValue);
+        setTerm(indices[i], newValue);
+    }
+}
+void BooleanFunction::setAllTerms(booleanValue newValue) {
+    for (int i = 0; i < terms.size(); i++)
+    {
+        setTerm(i, newValue);
     }
 }
 
