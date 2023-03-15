@@ -132,3 +132,18 @@ Implicant Implicant::operator+(const Implicant& otherImplicant) const {
     newCover[index] = X;
     return Implicant(newCover, getVariables());
 }
+
+bool Implicant::operator!=(const Implicant& otherImplicant) const {
+    vector<booleanValue> myCover = getCover(), otherCover = otherImplicant.getCover();
+    if (myCover.size() != otherCover.size()) return false;
+
+    for (int i = 0; i < myCover.size(); i++)
+    {
+        if (myCover[i] != otherCover[i]) return false;
+    }
+
+    return true;    
+}
+bool Implicant::operator!=(const Implicant& otherImplicant) const {
+    return !((*this)==otherImplicant);
+}

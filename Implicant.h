@@ -35,6 +35,9 @@ class Implicant : public BooleanFunction {
 
         bool isMergable(const Implicant& otherImplicant) const;
         Implicant operator+(const Implicant& otherImplicant) const;
+
+        bool operator==(const Implicant& otherImplicant) const;
+        bool operator!=(const Implicant& otherImplicant) const;
 };
 
 #endif
