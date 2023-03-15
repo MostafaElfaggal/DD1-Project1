@@ -19,7 +19,7 @@ int main() {
         {"ABCDEFGHI", SUCCESS, BooleanFunction(9, {"A", "B", "C", "D", "E", "F", "G", "H", "I"}, {511}, {})},
         {"A''bc+u", SUCCESS, BooleanFunction(4, {"A", "b", "c", "u"}, {7, 8, 9, 10, 11, 12, 13, 14, 15}, {})},
         {"'A+bc", FAILURE, NullFunction},
-        {"A+1", SUCCESS, BooleanFunction(1, {"A"}, {0, 1}, {})}, // FIXME: error
+        {"A+1", FAILURE, NullFunction},
         {"l+u++i", FAILURE, NullFunction},
         {"e+(q+z)", FAILURE, NullFunction},
         {"e+q+z", SUCCESS, BooleanFunction(3, {"e", "q", "z"}, {1, 2, 3, 4, 5, 6, 7}, {})},
@@ -31,11 +31,12 @@ int main() {
         {"a'' + b'+'c", FAILURE, NullFunction},
         {"a-b+c", FAILURE, NullFunction},
         {"A+A", SUCCESS, BooleanFunction(1, {"A"}, {1}, {})},
-        {"A+A+B+B+C+C", SUCCESS, BooleanFunction(3, {"A", "B", "C"}, {1, 2, 3, 4, 5, 6, 7}, {})}
+        {"A+A+B+B+C+C", SUCCESS, BooleanFunction(3, {"A", "B", "C"}, {1, 2, 3, 4, 5, 6, 7}, {})},
+        {"aba' + abc", SUCCESS, BooleanFunction(3, {"a", "b", "c"}, {7}, {})}
     };
     t.testSOPString(testCases);
 
-    BooleanFunction f("abc +a+ ab'");
+    BooleanFunction f("aba' + abc");
     f.printTruthTable();
     cout << "\n\n\n";
     f.printTruthTableLetters();

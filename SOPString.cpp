@@ -48,10 +48,14 @@ bool SOPString::validateAlphabet() {
             isSafe = true;
         else if (c == 43) // +
             isSafe = true;
-        else if (c == 48) // 0
-            isSafe = true;
-        else if (c == 49) // 1
-            isSafe = true;
+        // else if (c == 48) // 0
+        //     isSafe = true;
+        // else if (c == 49) // 1
+        //     isSafe = true;
+        // else if (c == 40) // (
+        //     isSafe = true;
+        // else if (c == 41) // )
+        //     isSafe = true;
         else if (c >= 97 && c <= 122) { // a-z
             isSafe = true;
             addVariable(string(1, c));
@@ -96,8 +100,9 @@ bool SOPString::isValid() {
     return true;    
 }
 
-vector<booleanValue> SOPString::convertProduct(string product) {
+vector<booleanValue> SOPString::convertProduct(string product, bool& isZero) {
     vector<booleanValue> varValues(variables.size(), X);
+    isZero = false;
 
     string lastVariable = string(1, product[0]);
     bool isNot = false;
@@ -117,8 +122,9 @@ vector<booleanValue> SOPString::convertProduct(string product) {
             else if (varValues[significance] != newValue) {
                 // a . a' = 0, hence the entire product doesn't affect the minterms
                 // return and abort the rest of the process
+                isZero = true;
                 return vector<booleanValue>(variables.size(), OFF);
-            }
+            } // else resetting the variable to the same value a.a = a
             lastVariable = currentChar;
         }
     }
@@ -174,8 +180,10 @@ void SOPString::prepareFunctionData() {
     vector<string> temp = expression_products;
     for (int i = 0; i < expression_products.size(); i++)
     {
-        vector<booleanValue> varValues = convertProduct(expression_products[i]);
-        addMinterms(varValues);
+        bool isZero = false;
+        vector<booleanValue> varValues = convertProduct(expression_products[i], isZero);
+        if (!isZero)
+            addMinterms(varValues);
     }
 }
 
