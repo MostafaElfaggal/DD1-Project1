@@ -1,5 +1,5 @@
 #include "QM.h"
 
-QM::QM(BooleanFunction function) {
-    
+QM::QM(BooleanFunction f) {
+    function = f;
 }

@@ -1,6 +1,6 @@
 #include "BooleanFunction.h"
 
-BooleanFunction::BooleanFunction(int varCount = 0)
+BooleanFunction::BooleanFunction(int varCount)
 {
     init(varCount);
 }

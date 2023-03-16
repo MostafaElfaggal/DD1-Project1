@@ -32,8 +32,7 @@ private:
 protected:
     void setAllTerms(booleanValue newValue);
 public:
-    BooleanFunction();
-    BooleanFunction(int varCount);
+    BooleanFunction(int varCount = 0);
     BooleanFunction(int varCount, vector<string> varNames);
     BooleanFunction(int varCount, vector<int> minterms);
     BooleanFunction(int varCount, vector<int> minterms, vector<int> dontcares);

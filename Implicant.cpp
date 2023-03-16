@@ -1,9 +1,9 @@
 #include "Implicant.h"
 
-Implicant::Implicant(vector<booleanValue> cover, bool newIsPrime=false, bool newIsEssential=false) : BooleanFunction(cover.size(), vector<string>(cover.size(), "")) {
+Implicant::Implicant(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential) : BooleanFunction(cover.size(), vector<string>(cover.size(), "")) {
     init(cover, newIsPrime, newIsEssential);
 }
-Implicant::Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime=false, bool newIsEssential=false) : BooleanFunction(cover.size(), variableNames) {
+Implicant::Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime, bool newIsEssential) : BooleanFunction(cover.size(), variableNames) {
     init(cover, newIsPrime, newIsEssential);
 }
 void Implicant::init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential) {
@@ -121,6 +121,7 @@ int Implicant::compare(const Implicant& otherImplicant) const {
             return -1; // more than one difference found
     }
     
+    return diffIndex;
 }
 Implicant Implicant::operator+(const Implicant& otherImplicant) const {
     int index = compare(otherImplicant);
@@ -133,7 +134,7 @@ Implicant Implicant::operator+(const Implicant& otherImplicant) const {
     return Implicant(newCover, getVariables());
 }
 
-bool Implicant::operator!=(const Implicant& otherImplicant) const {
+bool Implicant::operator==(const Implicant& otherImplicant) const {
     vector<booleanValue> myCover = getCover(), otherCover = otherImplicant.getCover();
     if (myCover.size() != otherCover.size()) return false;
 
