@@ -22,6 +22,7 @@ class Implicant : public BooleanFunction {
     public:
         Implicant(vector<booleanValue> cover, bool newIsPrime=false, bool newIsEssential=false);
         Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime=false, bool newIsEssential=false);
+        Implicant(int singleMinterm, vector<string> variableNames, bool newIsPrime=false, bool newIsEssential=false);
         void init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential);
 
         vector<booleanValue> getCover() const;

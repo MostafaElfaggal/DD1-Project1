@@ -6,6 +6,21 @@ Implicant::Implicant(vector<booleanValue> cover, bool newIsPrime, bool newIsEsse
 Implicant::Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime, bool newIsEssential) : BooleanFunction(cover.size(), variableNames) {
     init(cover, newIsPrime, newIsEssential);
 }
+Implicant::Implicant(int singleMinterm, vector<string> variableNames, bool newIsPrime, bool newIsEssential) : BooleanFunction(variableNames.size(), variableNames)  {
+    vector<booleanValue> cover(variableNames.size(), OFF);
+
+    // convert single minterm to cover
+    for (int i = 0; i < variableNames.size(); i++)
+    {
+        cover[i] = (booleanValue)(singleMinterm & 1);
+        singleMinterm >>= 1;
+    }
+
+    if (singleMinterm != 0)
+        throw out_of_range("Minterm provided out of range of variable names size");
+    
+    init(cover, newIsPrime, newIsEssential);
+}
 void Implicant::init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential) {
     coverRepresentation = cover;
     isPrime = newIsPrime;
