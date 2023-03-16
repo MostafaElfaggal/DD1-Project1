@@ -7,38 +7,41 @@
 
 using namespace std;
 
-class Implicant : public BooleanFunction {
-    private:
-        vector<booleanValue> coverRepresentation;
-        bool isPrime;
-        bool isEssential;
+class Implicant : public BooleanFunction
+{
+private:
+    vector<booleanValue> coverRepresentation;
+    bool isPrime;
+    bool isEssential;
 
-        void setCoverVariable(int significance, booleanValue newValue);
+    void setCoverVariable(int significance, booleanValue newValue);
 
-        void convertCoverToMinterms();
-        void addMinterms(int minSUM, vector<int> anyValueVariables, int currentVariable);
+    void convertCoverToMinterms();
+    void addMinterms(int minSUM, vector<int> anyValueVariables, int currentVariable);
 
-        int compare(const Implicant& otherImplicant) const;
-    public:
-        Implicant(vector<booleanValue> cover, bool newIsPrime=false, bool newIsEssential=false);
-        Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime=false, bool newIsEssential=false);
-        Implicant(int singleMinterm, vector<string> variableNames, bool newIsPrime=false, bool newIsEssential=false);
-        void init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential);
+    int compare(const Implicant &otherImplicant) const;
 
-        vector<booleanValue> getCover() const;
-        string getRepresentationString() const;
-        int get1sCount() const;
-        bool IsPrime() const;
-        bool IsEssential() const;
+public:
+    Implicant(vector<booleanValue> cover, bool newIsPrime = false, bool newIsEssential = false);
+    Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime = false, bool newIsEssential = false);
+    Implicant(int singleMinterm, vector<string> variableNames, bool newIsPrime = false, bool newIsEssential = false);
+    void init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential);
 
-        void setIsPrime(bool newIsPrime);
-        void setIsEssential(bool newIsEssential);
+    vector<booleanValue> getCover() const;
+    string getRepresentationString() const;
+    int get1sCount() const;
+    bool IsPrime() const;
+    bool IsEssential() const;
 
-        bool isMergable(const Implicant& otherImplicant) const;
-        Implicant operator+(const Implicant& otherImplicant) const;
+    void setIsPrime(bool newIsPrime);
+    void setIsEssential(bool newIsEssential);
 
-        bool operator==(const Implicant& otherImplicant) const;
-        bool operator!=(const Implicant& otherImplicant) const;
+    bool isMergable(const Implicant &otherImplicant) const;
+    Implicant operator+(const Implicant &otherImplicant) const;
+
+    bool operator==(const Implicant &otherImplicant) const;
+    bool operator!=(const Implicant &otherImplicant) const;
+    bool operator<(const Implicant &otherImplicant) const;
 };
 
 #endif

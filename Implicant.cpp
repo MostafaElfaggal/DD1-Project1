@@ -1,12 +1,15 @@
 #include "Implicant.h"
 
-Implicant::Implicant(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential) : BooleanFunction(cover.size(), vector<string>(cover.size(), "")) {
+Implicant::Implicant(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential) : BooleanFunction(cover.size(), vector<string>(cover.size(), ""))
+{
     init(cover, newIsPrime, newIsEssential);
 }
-Implicant::Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime, bool newIsEssential) : BooleanFunction(cover.size(), variableNames) {
+Implicant::Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime, bool newIsEssential) : BooleanFunction(cover.size(), variableNames)
+{
     init(cover, newIsPrime, newIsEssential);
 }
-Implicant::Implicant(int singleMinterm, vector<string> variableNames, bool newIsPrime, bool newIsEssential) : BooleanFunction(variableNames.size(), variableNames)  {
+Implicant::Implicant(int singleMinterm, vector<string> variableNames, bool newIsPrime, bool newIsEssential) : BooleanFunction(variableNames.size(), variableNames)
+{
     vector<booleanValue> cover(variableNames.size(), OFF);
 
     // convert single minterm to cover
@@ -18,10 +21,11 @@ Implicant::Implicant(int singleMinterm, vector<string> variableNames, bool newIs
 
     if (singleMinterm != 0)
         throw out_of_range("Minterm provided out of range of variable names size");
-    
+
     init(cover, newIsPrime, newIsEssential);
 }
-void Implicant::init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential) {
+void Implicant::init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential)
+{
     coverRepresentation = cover;
     isPrime = newIsPrime;
     isEssential = newIsEssential;
@@ -29,7 +33,8 @@ void Implicant::init(vector<booleanValue> cover, bool newIsPrime, bool newIsEsse
     convertCoverToMinterms();
 }
 
-void Implicant::convertCoverToMinterms() {
+void Implicant::convertCoverToMinterms()
+{
     setAllTerms(OFF);
 
     vector<booleanValue> varValues = getCover();
@@ -38,9 +43,12 @@ void Implicant::convertCoverToMinterms() {
     int accumalatedPower = 1;
     for (int i = 0; i < varValues.size(); i++)
     {
-        if (varValues[i] == ON) {
+        if (varValues[i] == ON)
+        {
             minSUM += accumalatedPower;
-        } else if (varValues[i] == X) {
+        }
+        else if (varValues[i] == X)
+        {
             anyValueVariables.push_back(accumalatedPower);
         }
 
@@ -49,96 +57,118 @@ void Implicant::convertCoverToMinterms() {
 
     addMinterms(minSUM, anyValueVariables, 0);
 }
-void Implicant::addMinterms(int minSUM, vector<int> anyValueVariables, int currentVariable) {
-    if (currentVariable >= anyValueVariables.size()) {
+void Implicant::addMinterms(int minSUM, vector<int> anyValueVariables, int currentVariable)
+{
+    if (currentVariable >= anyValueVariables.size())
+    {
         setTerm(minSUM, ON);
         return;
     }
 
-    addMinterms(minSUM, anyValueVariables, currentVariable+1);
-    addMinterms(minSUM + anyValueVariables[currentVariable], anyValueVariables, currentVariable+1);
+    addMinterms(minSUM, anyValueVariables, currentVariable + 1);
+    addMinterms(minSUM + anyValueVariables[currentVariable], anyValueVariables, currentVariable + 1);
 }
 
-vector<booleanValue> Implicant::getCover() const {
+vector<booleanValue> Implicant::getCover() const
+{
     return coverRepresentation;
 }
 
-string Implicant::getRepresentationString() const {
+string Implicant::getRepresentationString() const
+{
     string coverString = "";
     vector<booleanValue> coverVector = getCover();
     for (int i = 0; i < coverVector.size(); i++)
     {
-        if (coverVector[i] == OFF) {
+        if (coverVector[i] == OFF)
+        {
             coverString += "0";
-        } else if (coverVector[i] == ON) {
+        }
+        else if (coverVector[i] == ON)
+        {
             coverString += "1";
-        } else if (coverVector[i] == X) {
+        }
+        else if (coverVector[i] == X)
+        {
             coverString += "-";
         }
     }
 
-    return coverString;    
+    return coverString;
 }
 
-
-int Implicant::get1sCount() const {
+int Implicant::get1sCount() const
+{
     int count = 0;
     for (booleanValue val : getCover())
-        if (val == ON) count++;
-    
+        if (val == ON)
+            count++;
+
     return count;
 }
 
-bool Implicant::IsPrime() const {
+bool Implicant::IsPrime() const
+{
     return isPrime;
 }
 
-bool Implicant::IsEssential() const {
+bool Implicant::IsEssential() const
+{
     return isEssential;
 }
 
-void Implicant::setIsPrime(bool newIsPrime) {
+void Implicant::setIsPrime(bool newIsPrime)
+{
     isPrime = newIsPrime;
 }
 
-void Implicant::setIsEssential(bool newIsEssential) {
+void Implicant::setIsEssential(bool newIsEssential)
+{
     isEssential = newIsEssential;
 }
 
-void Implicant::setCoverVariable(int significance, booleanValue newValue) {
+void Implicant::setCoverVariable(int significance, booleanValue newValue)
+{
     if (!(0 <= significance && significance >= variableCount()))
         throw out_of_range("Variable Significance out of range");
 
     coverRepresentation[significance] = newValue;
 }
 
-bool Implicant::isMergable(const Implicant& otherImplicant) const {
+bool Implicant::isMergable(const Implicant &otherImplicant) const
+{
     return compare(otherImplicant) != -1;
 }
 
-int Implicant::compare(const Implicant& otherImplicant) const {
-    if (variableCount() != otherImplicant.variableCount()) return -1;
+int Implicant::compare(const Implicant &otherImplicant) const
+{
+    if (variableCount() != otherImplicant.variableCount())
+        return -1;
 
     int diffInOnes = get1sCount() - otherImplicant.get1sCount();
-    if (!(diffInOnes == 1 || diffInOnes == -1)) return -1;
+    if (!(diffInOnes == 1 || diffInOnes == -1))
+        return -1;
 
     int diffIndex = -1;
     vector<booleanValue> myCover = getCover(), otherCover = otherImplicant.getCover();
     for (int i = 0; i < myCover.size(); i++)
     {
-        if (myCover[i] == otherCover[i]) continue;// if the 2 bits are identical no more comparison needed
+        if (myCover[i] == otherCover[i])
+            continue; // if the 2 bits are identical no more comparison needed
 
-        if (myCover[i] == X || otherCover[i] == X) return -1; // the bits are different and one of them is a -, thus no match
+        if (myCover[i] == X || otherCover[i] == X)
+            return -1; // the bits are different and one of them is a -, thus no match
 
         if (diffIndex == -1)
             diffIndex = i; // first bit difference found
         else
             return -1; // more than one difference found
     }
-    
+
     return diffIndex;
 }
-Implicant Implicant::operator+(const Implicant& otherImplicant) const {
+Implicant Implicant::operator+(const Implicant &otherImplicant) const
+{
     int index = compare(otherImplicant);
     if (index == -1)
         throw invalid_argument("Implicant operands are non-compatible for merging");
@@ -149,17 +179,29 @@ Implicant Implicant::operator+(const Implicant& otherImplicant) const {
     return Implicant(newCover, getVariables());
 }
 
-bool Implicant::operator==(const Implicant& otherImplicant) const {
+bool Implicant::operator==(const Implicant &otherImplicant) const
+{
     vector<booleanValue> myCover = getCover(), otherCover = otherImplicant.getCover();
-    if (myCover.size() != otherCover.size()) return false;
+    if (myCover.size() != otherCover.size())
+        return false;
 
     for (int i = 0; i < myCover.size(); i++)
     {
-        if (myCover[i] != otherCover[i]) return false;
+        if (myCover[i] != otherCover[i])
+            return false;
     }
 
-    return true;    
+    return true;
 }
-bool Implicant::operator!=(const Implicant& otherImplicant) const {
-    return !((*this)==otherImplicant);
+bool Implicant::operator!=(const Implicant &otherImplicant) const
+{
+    return !((*this) == otherImplicant);
+}
+
+bool Implicant::operator<(const Implicant &otherImplicant) const
+{
+
+    // TODO: define this operator properly
+
+    return !((*this) < otherImplicant);
 }

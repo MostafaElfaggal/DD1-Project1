@@ -1,21 +1,26 @@
 #include <vector>
 #include <set>
+#include <unordered_set>
 #include "Implicant.h"
 
 #ifndef QM_IMPLICANTSTABLE
 #define QM_IMPLICANTSTABLE
 
-typedef vector<set<Implicant>> QM_ImplicantsTable_Column;
+typedef set<Implicant> ImplicantGroup_QM_ImplicantsTable;
+typedef vector<ImplicantGroup_QM_ImplicantsTable> Column_QM_ImplicantsTable;
 
-class QM_ImplicantsTable : public vector<QM_ImplicantsTable_Column> {
-    private:
-        BooleanFunction function;
-    public:
-        QM_ImplicantsTable(BooleanFunction f);
+class QM_ImplicantsTable
+{
+private:
+    BooleanFunction function;
+    vector<Column_QM_ImplicantsTable> table;
 
-        QM_ImplicantsTable_Column getColumn(int index) const;
+public:
+    QM_ImplicantsTable(BooleanFunction f);
 
-        void computeColumn(int columnIndex);
+    Column_QM_ImplicantsTable getColumn(int index) const;
+
+    void computeColumn(int columnIndex);
 };
 
 #endif
