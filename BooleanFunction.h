@@ -54,6 +54,7 @@ public:
     int getTermsCount() const;
     booleanValue operator[] (int index) const;
     vector<booleanValue> getTerms() const;
+    vector<int> getMinterms() const;
     void setTerm(int index, booleanValue newValue);
     void setTerms(vector<int> indices, booleanValue newValue);
 

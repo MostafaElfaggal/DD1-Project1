@@ -127,6 +127,18 @@ booleanValue BooleanFunction::operator[] (int index) const {
 vector<booleanValue> BooleanFunction::getTerms() const {
     return terms;
 }
+
+vector<int> BooleanFunction::getMinterms() const{
+    vector<booleanValue> terms = getTerms();
+    vector<int> minterms;
+
+    for(int i=0; i<terms.size();i++){
+        if(term[i]==ON)
+            minterms.push_back(i);
+    }
+    return minterms;
+}
+
 void BooleanFunction::setTerm(int index, booleanValue newValue)
 {
     if (!(index >= 0 && index < getTermsCount()))

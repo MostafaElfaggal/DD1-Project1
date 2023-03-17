@@ -24,6 +24,10 @@ Implicant::Implicant(int singleMinterm, vector<string> variableNames, bool newIs
 
     init(cover, newIsPrime, newIsEssential);
 }
+Implicant::Implicant(const Implicant& otherImplicant): BooleanFunction(otherImplicant.variableCount(), otherImplicant.getVariables()){
+    init(otherImplicant.getCover(), otherImplicant.IsPrime(), otherImplicant.IsEssential());
+}
+
 void Implicant::init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential)
 {
     coverRepresentation = cover;

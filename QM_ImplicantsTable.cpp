@@ -10,6 +10,10 @@ Column_QM_ImplicantsTable QM_ImplicantsTable::getColumn(int index) const
     return table[index];
 }
 
+vector<Implicant> QM_ImplicantsTable::getPIs(){
+    return vector<Implicant>(PIs.begin(), PIs.end());
+}
+
 void QM_ImplicantsTable::computeColumn(int columnIndex)
 {
     if (!(0 <= columnIndex && columnIndex < table.size()))
@@ -63,4 +67,8 @@ void QM_ImplicantsTable::computeColumn(int columnIndex)
             }
         }
     }
+}
+
+void QM_ImplicantsTable::compute(){
+    //TODO: to be filled
 }

@@ -1,11 +1,16 @@
+#include <set>
+#include <unordered_set>
 #include <vector>
 #include "BooleanFunction.h"
 #include "BooleanValue.h"
+
 
 #ifndef IMPLICANT
 #define IMPLICANT
 
 using namespace std;
+
+typedef set<Implicant> ImplicantGroup_QM_ImplicantsTable;
 
 class Implicant : public BooleanFunction
 {
@@ -25,6 +30,7 @@ public:
     Implicant(vector<booleanValue> cover, bool newIsPrime = false, bool newIsEssential = false);
     Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime = false, bool newIsEssential = false);
     Implicant(int singleMinterm, vector<string> variableNames, bool newIsPrime = false, bool newIsEssential = false);
+    Implicant(const Implicant& otherImplicant);
     void init(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential);
 
     vector<booleanValue> getCover() const;
