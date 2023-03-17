@@ -9,11 +9,23 @@ QM_PrimesTable::QM_PrimesTable(BooleanFunction f, vector<Implicant> pis){
 }
 
 void QM_PrimesTable::findEssentials(){
-    
+    for(int i=0; i< table.size();i++){
+        if(searchEssentialinColumn(i)){
+            EPIs.insert();
+            removeColumn(i);
+            removeRow(i);
+            i--;
+        }
+    }
 }
 
 bool QM_PrimesTable::searchEssentialinColumn(int index){
-
+    int count=0;
+    for(int i=0; i<table[index].size();i++){
+        if(table[index][i])
+            count++;
+    }
+    return (count==1);
 }
 
 void QM_PrimesTable::findNonEssentials(){
@@ -34,7 +46,7 @@ void QM_PrimesTable::computeColumnDominations(){
 }
 
 void QM_PrimesTable::removeColumn(int index){
-    //TODO
+    
 }
 void QM_PrimesTable::removeRow(int index){
 
