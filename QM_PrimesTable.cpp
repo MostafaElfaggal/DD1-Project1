@@ -98,6 +98,7 @@ void QM_PrimesTable::removeRow(int index) {
 }
 
 void QM_PrimesTable::compute() {
+    // TODO: remove prints
     cout << printTable() << "\n\n";
 
     findEssentials();

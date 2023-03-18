@@ -25,7 +25,7 @@ class SOPString {
         vector<string> variableNames();
 
         void addVariable(string varName);
-        vector<booleanValue> convertProduct(string product, bool& isZero); // FIXME: consider 1, and 0
+        vector<booleanValue> convertProduct(string product, bool& isZero);
         bool addProduct(string product);
         void addMinterms(vector<booleanValue> varValues);
         void addMinterms(int minSUM, vector<int> anyValueVariables, int currentVariable); // recurrsive over all possible combinations
