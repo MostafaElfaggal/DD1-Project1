@@ -59,6 +59,7 @@ public:
     void setTerms(vector<int> indices, booleanValue newValue);
 
     string getExpression() const;
+    void setExpression(string newExpression);
 
     void functionChanged();
 

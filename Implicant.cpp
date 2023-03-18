@@ -1,5 +1,8 @@
 #include "Implicant.h"
 
+Implicant::Implicant() : BooleanFunction() {
+    init({}, false, false);
+}
 Implicant::Implicant(vector<booleanValue> cover, bool newIsPrime, bool newIsEssential) : BooleanFunction(cover.size(), vector<string>(cover.size(), ""))
 {
     init(cover, newIsPrime, newIsEssential);
@@ -204,10 +207,15 @@ bool Implicant::operator!=(const Implicant &otherImplicant) const
 
 bool Implicant::operator<(const Implicant &otherImplicant) const
 {
+    vector<booleanValue> myCover = getCover(), otherCover = otherImplicant.getCover();
 
-    // TODO: define this operator properly
+    for (int i = 0; i < myCover.size(); i++)
+    {
+        if (myCover[i] < otherCover[i]) return true;
+    }
+    
 
-    return !((*this) < otherImplicant);
+    return false;
 }
 
 
@@ -235,4 +243,22 @@ string Implicant::print() {
     cout << ")";
 
     return res;    
+}
+
+string Implicant::toString() {
+    vector<string> variableNames = getVariables();
+    vector<booleanValue> cover = getCover();
+
+    string productString = "";
+
+    for (int i = 0; i < cover.size(); i++)
+    {
+        if (cover[i] == OFF) {
+            productString += variableNames[i] + "'";
+        } else if (cover[i] == ON) {
+            productString += variableNames[i];
+        }
+    }
+    
+    return productString;
 }

@@ -11,13 +11,22 @@ Column_QM_ImplicantsTable QM_ImplicantsTable::getColumn(int index) const
 }
 
 vector<Implicant> QM_ImplicantsTable::getPIs(){
-    return vector<Implicant>(PIs.begin(), PIs.end());
+    vector<Implicant> PIsVector;
+    for (auto imp : PIs)
+    {
+        PIsVector.push_back(imp);
+    }
+    
+    return PIsVector;
 }
 
 void QM_ImplicantsTable::computeColumn(int columnIndex)
 {
     if (!(0 <= columnIndex && columnIndex < table.size()))
         throw out_of_range("Column index out of range");
+
+    
+    // TODO: use unordered sets, extract PIs by the pointer idea
 
     if (columnIndex == 0)
     {
@@ -31,6 +40,7 @@ void QM_ImplicantsTable::computeColumn(int columnIndex)
             {
                 // implicant(term)
                 Implicant imp(i, function.getVariables(), true, false);
+                PIs.insert(imp);
 
                 table[columnIndex][imp.get1sCount()].insert(imp);
             }
@@ -39,29 +49,25 @@ void QM_ImplicantsTable::computeColumn(int columnIndex)
     // compute the column using the previous one
     else
     {
+        // O(n^3)
         for (int i = 0; i < table[columnIndex - 1].size() - 1; i++)
         {
-            for (auto j = table[columnIndex - 1][i].begin(); j != table[columnIndex - 1][i].end(); j++)
+            for (auto constImp1 : table[columnIndex - 1][i])
             {
-                for (auto k = table[columnIndex - 1][i + 1].begin(); k != table[columnIndex - 1][i + 1].end(); k++)
+                for (auto constImp2 : table[columnIndex - 1][i + 1])
                 {
-                    if (j->isMergable(*k))
+                    if (constImp1.isMergable(constImp2))
                     {
-                        Implicant mergedImp = *j + *k;
-                        Implicant temp1 = *j, temp2 = *k;
+                        Implicant mergedImp = constImp1 + constImp2;
 
-                        temp1.setIsPrime(false);
-                        temp2.setIsPrime(false);
+                        PIs.erase(constImp1);
+                        PIs.erase(constImp2);
 
-                        // TODO: improve the complexity of erase and insert
+                        constImp1.setIsPrime(false);
+                        constImp2.setIsPrime(false);
 
-                        table[columnIndex - 1][i].erase(j);
-                        table[columnIndex - 1][i].erase(k);
-
-                        table[columnIndex - 1][i].insert(temp1);
-                        table[columnIndex - 1][i].insert(temp2);
-
-                        table[columnIndex][mergedImp.get1sCount()].insert(mergedImp);
+                        PIs.insert(mergedImp);
+                        table[columnIndex][i].insert(mergedImp);
                     }
                 }
             }
@@ -70,5 +76,8 @@ void QM_ImplicantsTable::computeColumn(int columnIndex)
 }
 
 void QM_ImplicantsTable::compute(){
-    //TODO: to be filled
+    for (int i = 0; i < table.size(); i++)
+    {
+        computeColumn(i);
+    }
 }

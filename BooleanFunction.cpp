@@ -133,7 +133,7 @@ vector<int> BooleanFunction::getMinterms() const{
     vector<int> minterms;
 
     for(int i=0; i<terms.size();i++){
-        if(term[i]==ON)
+        if(terms[i]==ON)
             minterms.push_back(i);
     }
     return minterms;
@@ -165,6 +165,9 @@ void BooleanFunction::setAllTerms(booleanValue newValue) {
 
 string BooleanFunction::getExpression() const {
     return expression;
+}
+void BooleanFunction::setExpression(string newExpression) {
+    expression = newExpression;
 }
 
 void BooleanFunction::functionChanged()

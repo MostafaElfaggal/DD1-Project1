@@ -10,8 +10,6 @@
 
 using namespace std;
 
-typedef set<Implicant> ImplicantGroup_QM_ImplicantsTable;
-
 class Implicant : public BooleanFunction
 {
 private:
@@ -27,6 +25,7 @@ private:
     int compare(const Implicant &otherImplicant) const;
 
 public:
+    Implicant();
     Implicant(vector<booleanValue> cover, bool newIsPrime = false, bool newIsEssential = false);
     Implicant(vector<booleanValue> cover, vector<string> variableNames, bool newIsPrime = false, bool newIsEssential = false);
     Implicant(int singleMinterm, vector<string> variableNames, bool newIsPrime = false, bool newIsEssential = false);
@@ -49,7 +48,22 @@ public:
     bool operator!=(const Implicant &otherImplicant) const;
     bool operator<(const Implicant &otherImplicant) const;
 
-    string print();
+    string print(); // returns the 1,0,- string
+    string toString(); // returns the product using the variables
 };
+
+typedef unordered_set<Implicant> ImplicantGroup_QM_ImplicantsTable;
+
+namespace std
+{
+    template<>
+    struct hash<Implicant>
+    {
+        size_t operator()(const Implicant & obj) const
+        {
+            return hash<string>()(obj.getRepresentationString());
+        }
+    };
+}
 
 #endif

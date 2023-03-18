@@ -12,5 +12,31 @@ void QM::implicantsTable(){
 void QM::primesTable(){
     QM_PrimesTable secondTable(function, PIs);
     secondTable.compute();
-    //TODO: return extract EPIs and Non-EPIs from second table
+    EPIs = secondTable.getEPIs();
+    NonEPIs = secondTable.getNonEPIs();
+}
+
+string QM::findSimplifiedString() {
+    implicantsTable();
+    primesTable();
+
+    string simplified;
+    vector<Implicant> totalImplicants(EPIs.begin(), EPIs.end());
+    totalImplicants.insert(totalImplicants.end(), NonEPIs.begin(), NonEPIs.end());
+
+    for (int i = 0; i < totalImplicants.size(); i++)
+    {
+        if (i == 0)
+            simplified += totalImplicants[i].toString();
+        else
+            simplified += " + " + totalImplicants[i].toString();
+    }
+    
+
+    function.setExpression(simplified);
+    return simplified;
+}
+
+BooleanFunction QM::getFunction() {
+    return function;
 }

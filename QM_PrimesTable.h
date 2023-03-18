@@ -11,12 +11,13 @@ class QM_PrimesTable{
         BooleanFunction function;
         vector<Implicant> PIs;
         ImplicantGroup_QM_ImplicantsTable EPIs;
+        ImplicantGroup_QM_ImplicantsTable NonEPIs;
         vector<int> minterms;
         vector<vector<bool>> table;
 
         void prepareTable();
 
-        void findEssentials();
+        bool findEssentials(bool areTrueEssentials=false);
         int searchEssentialinColumn(int index); // returns the index of the essential implicant found
         
         void findNonEssentials();
@@ -25,6 +26,8 @@ class QM_PrimesTable{
         void computeRowDominations();
         void computeColumnDominations();
 
+        void simplifyTable();
+
         void removeColumn(int index);
         void removeRow(int index);
 
@@ -32,6 +35,9 @@ class QM_PrimesTable{
         QM_PrimesTable(BooleanFunction f, vector<Implicant> pis);
         void compute();
         string printTable();
+
+        vector<Implicant> getEPIs();
+        vector<Implicant> getNonEPIs();
 };
 
 #endif

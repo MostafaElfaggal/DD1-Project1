@@ -10,10 +10,15 @@ class QM {
     private:
         BooleanFunction function;
         vector<Implicant> PIs;
-    public:
-        QM(BooleanFunction f);
+        vector<Implicant> EPIs;
+        vector<Implicant> NonEPIs;
+
         void implicantsTable();
         void primesTable();
+    public:
+        QM(BooleanFunction f);
+        string findSimplifiedString();
+        BooleanFunction getFunction();
 };
 
 #endif
