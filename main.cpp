@@ -37,7 +37,7 @@ int main() {
     // };
     // t.testSOPString(testCases);
 
-    string s = "AB + A'C + AB'C";
+    // string s;
     // cout << "SOP String: ";
     // getline(cin, s);
     // cout << s << endl;
@@ -45,8 +45,10 @@ int main() {
     // BooleanFunction f(4, {"D", "C", "B", "A"}, {4,5,6,8,9,10,13}, {0,7,15});
     // BooleanFunction f(4, {"D", "C", "B", "A"}, {0,2,5,6,7,8,10,12,13,14,15});
     // BooleanFunction f("B + CD + ABD' + A'B'CD'");
-    BooleanFunction f(s);
+    // BooleanFunction f(s);
     // BooleanFunction f(3, {"C", "B", "A"}, {1,3,5,6,7});
+    // BooleanFunction f(5, {"E", "D", "C", "B", "A"}, {0, 2, 3, 5, 7, 9, 11, 13, 14, 16, 18, 24, 26, 28, 30}, {});
+    BooleanFunction f(10, {"J", "I", "H", "G", "F", "E", "D", "C", "B", "A"}, {0, 2, 3, 5, 7, 9, 11, 13, 14, 16, 18, 24, 26, 28, 30, 119, 140, 234, 407, 603, 599, 624, 813, 901}, {1020, 1, 50, 999, 142});
 
     cout << "Minterms: ";
     for (auto i : f.getMinterms()) {
@@ -72,6 +74,18 @@ int main() {
 
     QM qm(f);
     string expression = qm.findSimplifiedString();
-    
-    cout << "Simplified Expression(QM): " << expression << "\n";
+
+    cout << "Prime Implicants:\n";
+    qm.printPIs();
+    cout << "\n\n";
+
+    cout << "Essential Prime Implicants:\n";
+    qm.printEPIs();
+    cout << "\n\n";
+
+    cout << "Minterms not covered by Essentials: ";
+    qm.printNonEPIMinterms();
+    cout << "\n\n";
+
+    cout << "Simplified Expression(QM): " << expression << "\n\n";
 }

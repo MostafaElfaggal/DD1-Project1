@@ -13,12 +13,18 @@ class QM {
         vector<Implicant> EPIs;
         vector<Implicant> NonEPIs;
 
+        vector<int> NonEPIMinterms;
+
         void implicantsTable();
         void primesTable();
     public:
         QM(BooleanFunction f);
         string findSimplifiedString();
         BooleanFunction getFunction();
+
+        void printPIs(); // show minterms and binary representation
+        void printEPIs(); // show products of each
+        void printNonEPIMinterms(); // print minterms that are non EPI
 };
 
 #endif

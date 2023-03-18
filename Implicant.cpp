@@ -220,14 +220,7 @@ bool Implicant::operator<(const Implicant &otherImplicant) const
 
 
 string Implicant::print() {
-    string res = "";
-    vector<booleanValue> cover = getCover();
-    for (int i = 0; i < cover.size(); i++)
-    {
-        if (cover[i] == OFF) res += "0";
-        else if (cover[i] == ON) res += "1";
-        else res += "-"; // X
-    }
+    string res = getRepresentationString();
     
     res += " (";
 

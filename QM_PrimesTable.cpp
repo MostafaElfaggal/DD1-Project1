@@ -211,12 +211,10 @@ void QM_PrimesTable::removeRow(int index) {
 }
 
 void QM_PrimesTable::compute() {
-    // TODO: remove prints
-    // cout << printTable() << "\n\n";
-
     findEssentials(true);
-    // cout << printTable();
-    
+
+    NonEPIMinterms = minterms;
+
     findNonEssentials();
 }
 
@@ -261,4 +259,8 @@ vector<Implicant> QM_PrimesTable::getNonEPIs() {
     }
 
     return NonEPIsVector; 
+}
+
+vector<int> QM_PrimesTable::getNonEPIMinterms() {
+    return NonEPIMinterms;
 }

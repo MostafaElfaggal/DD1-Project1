@@ -13,6 +13,7 @@ class QM_PrimesTable{
         ImplicantGroup_QM_ImplicantsTable EPIs;
         ImplicantGroup_QM_ImplicantsTable NonEPIs;
         vector<int> minterms;
+        vector<int> NonEPIMinterms;
         vector<vector<bool>> table;
 
         void prepareTable();
@@ -38,6 +39,7 @@ class QM_PrimesTable{
 
         vector<Implicant> getEPIs();
         vector<Implicant> getNonEPIs();
+        vector<int> getNonEPIMinterms();
 };
 
 #endif

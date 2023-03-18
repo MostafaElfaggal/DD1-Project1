@@ -14,6 +14,7 @@ void QM::primesTable(){
     secondTable.compute();
     EPIs = secondTable.getEPIs();
     NonEPIs = secondTable.getNonEPIs();
+    NonEPIMinterms = secondTable.getNonEPIMinterms();
 }
 
 string QM::findSimplifiedString() {
@@ -39,4 +40,32 @@ string QM::findSimplifiedString() {
 
 BooleanFunction QM::getFunction() {
     return function;
+}
+
+void QM::printPIs() {
+    for (int i = 0; i < PIs.size(); i++)
+    {
+        cout << PIs[i].getRepresentationString() << ": ";
+        for (auto i : PIs[i].getMinterms())
+        {
+            cout << i << ", ";
+        }
+        cout << "\n";        
+    }
+}
+
+void QM::printEPIs() {
+    for (int i = 0; i < EPIs.size(); i++)
+    {
+        cout << EPIs[i].toString() << " ";
+    }
+    cout << "\n";
+}
+
+void QM::printNonEPIMinterms() {
+    for (auto i : NonEPIMinterms)
+    {
+        cout << i << " ";
+    }
+    cout << "\n";
 }
