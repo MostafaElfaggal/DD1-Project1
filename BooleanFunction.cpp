@@ -179,6 +179,7 @@ void BooleanFunction::functionChanged()
 void BooleanFunction::SOPToFunction(string sop) {
     SOPString s(sop);
     copyFromOtherFunction(BooleanFunction(s.variableCount(), s.getVariableNames(), s.getMinterms()));
+    setExpression(sop);
 }
 
 // print the truth table of the function
@@ -198,7 +199,7 @@ void BooleanFunction::printTruthTable() const
         else if (terms[i] == ON) val = "1";
         else val = "X";
         
-        string binaryNum = adjustStr(DECtoBIN(i), variableCount()); // TODO: to be adjusted and cleaned
+        string binaryNum = adjustStr(DECtoBIN(i), variableCount());
         string formatedBinaryNum = "";
         formatedBinaryNum += binaryNum[0];
         for (int i = 1; i < binaryNum.length(); i++)
