@@ -209,3 +209,30 @@ bool Implicant::operator<(const Implicant &otherImplicant) const
 
     return !((*this) < otherImplicant);
 }
+
+
+string Implicant::print() {
+    string res = "";
+    vector<booleanValue> cover = getCover();
+    for (int i = 0; i < cover.size(); i++)
+    {
+        if (cover[i] == OFF) res += "0";
+        else if (cover[i] == ON) res += "1";
+        else res += "-"; // X
+    }
+    
+    res += " (";
+
+    vector<int> mins = getMinterms();
+    for (int i = 0; i < mins.size(); i++)
+    {
+        if (i == 0)
+            res += to_string(mins[i]);
+        else
+            res += ", " + to_string(mins[i]);
+    }
+
+    cout << ")";
+
+    return res;    
+}

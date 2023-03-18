@@ -48,6 +48,8 @@ public:
     bool operator==(const Implicant &otherImplicant) const;
     bool operator!=(const Implicant &otherImplicant) const;
     bool operator<(const Implicant &otherImplicant) const;
+
+    string print();
 };
 
 #endif
