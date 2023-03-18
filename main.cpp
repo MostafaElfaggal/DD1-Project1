@@ -37,25 +37,41 @@ int main() {
     // };
     // t.testSOPString(testCases);
 
+    string s = "AB + A'C + AB'C";
+    // cout << "SOP String: ";
+    // getline(cin, s);
+    // cout << s << endl;
+
     // BooleanFunction f(4, {"D", "C", "B", "A"}, {4,5,6,8,9,10,13}, {0,7,15});
     // BooleanFunction f(4, {"D", "C", "B", "A"}, {0,2,5,6,7,8,10,12,13,14,15});
-    BooleanFunction f("B + CD + ABD' + A'B'CD'");
+    // BooleanFunction f("B + CD + ABD' + A'B'CD'");
+    BooleanFunction f(s);
+    // BooleanFunction f(3, {"C", "B", "A"}, {1,3,5,6,7});
+
+    cout << "Minterms: ";
     for (auto i : f.getMinterms()) {
-        cout << i << " ";
+        cout << i << ", ";
     }
     cout << endl;
+
+    cout << "Truthtable:-\n";
     f.printTruthTable();
-    cout << "\n\n";
-    // f.printTruthTable();
-    // cout << "\n\n\n";
-    // f.printTruthTableLetters();
-    // cout << "\n\n\n";
-    // f.printSOP();
-    // cout << "\n\n\n";
-    // f.printPOS();
-    // cout << "\n\n\n";
+    cout << "\n\n\n";
+
+    cout << "Letter Truthtable:-\n";
+    f.printTruthTableLetters();
+    cout << "\n\n\n";
+
+    cout << "Canonical SOP: ";
+    f.printSOP();
+    cout << "\n\n\n";
+
+    cout << "Canonical POS: ";
+    f.printPOS();
+    cout << "\n\n\n";
 
     QM qm(f);
     string expression = qm.findSimplifiedString();
-    cout << expression << "\n";
+    
+    cout << "Simplified Expression(QM): " << expression << "\n";
 }

@@ -126,6 +126,7 @@ vector<booleanValue> SOPString::convertProduct(string product, bool& isZero) {
                 return vector<booleanValue>(variables.size(), OFF);
             } // else resetting the variable to the same value a.a = a
             lastVariable = currentChar;
+            isNot = false; // reset for next variable
         }
     }
 
@@ -177,7 +178,6 @@ void SOPString::addMinterms(int minSUM, vector<int> anyValueVariables, int curre
 void SOPString::prepareFunctionData() {
     // convert products to function terms
 
-    vector<string> temp = expression_products;
     for (int i = 0; i < expression_products.size(); i++)
     {
         bool isZero = false;
