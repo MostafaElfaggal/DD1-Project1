@@ -243,6 +243,7 @@ string Implicant::toString() {
     vector<booleanValue> cover = getCover();
 
     string productString = "";
+    bool isAllX = true;
 
     for (int i = 0; i < cover.size(); i++)
     {
@@ -251,7 +252,10 @@ string Implicant::toString() {
         } else if (cover[i] == ON) {
             productString += variableNames[i];
         }
+
+        if (cover[i] != X) isAllX = false;
     }
     
+    if (isAllX) return "1";
     return productString;
 }

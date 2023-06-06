@@ -25,6 +25,11 @@ string QM::findSimplifiedString() {
     vector<Implicant> totalImplicants(EPIs.begin(), EPIs.end());
     totalImplicants.insert(totalImplicants.end(), NonEPIs.begin(), NonEPIs.end());
 
+    if (totalImplicants.size() == 0) {
+        function.setExpression("0");
+        return "0";
+    }
+
     for (int i = 0; i < totalImplicants.size(); i++)
     {
         if (i == 0)
